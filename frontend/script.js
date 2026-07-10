@@ -1,6 +1,6 @@
 let order = {};
 let orderNumber = 1001;
-
+let sales = JSON.parse(localStorage.getItem("sales")) || [];
 function addItem(name, price) {
     if (order[name]) {
         order[name].quantity++;
@@ -92,7 +92,25 @@ function completeSale() {
     }
 
     const tax = subtotalAmount * 0.06;
+const sale = {
+    orderNumber: orderNumber,
+    date: new Date().toISOString(),
+    items: Object.entries(order).map(([name, details]) => ({
+        name: name,
+        price: details.price,
+        quantity: details.quantity
+    })),
+    revenue: subtotalAmount,
+    taxOwed: tax
+};
 
+sales.push(sale);
+
+localStorage.setItem("sales", JSON.stringify(sales));
+
+updateSalesSummary();
+
+document.getElementById("saleComplete").classList.remove("hidden");
     document.getElementById("receiptOrderNumber").textContent =
         orderNumber;
 
@@ -111,4 +129,26 @@ function startNewOrder() {
     document.getElementById("saleComplete").classList.add("hidden");
 
     clearOrder();
-}
+}function updateSalesSummary() {
+    const today = new Date().toDateString();
+
+    const todaysSales = sales.filter(sale => {
+        return new Date(sale.date).toDateString() === today;
+    });
+
+    const ordersToday = todaysSales.length;
+
+    const revenueToday = todaysSales.reduce((total, sale) => {
+        return total + sale.revenue;
+    }, 0);
+
+    const taxToday = todaysSales.reduce((total, sale) => {
+        return total + sale.taxOwed;
+    }, 0);
+
+    document.getElementById("ordersToday").textContent = ordersToday;
+    document.getElementById("revenueToday").textContent =
+        revenueToday.toFixed(2);
+    document.getElementById("taxToday").textContent =
+        taxToday.toFixed(2);
+}updateSalesSummary();
