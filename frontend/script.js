@@ -1,6 +1,17 @@
 let order = {};
 let orderNumber = 1001;
+
 let sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+let inventory = JSON.parse(localStorage.getItem("inventory")) || {
+    Popcorn: 4,
+    Soda: 40,
+    Candy: 30,
+    Pretzel: 20
+};
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
 function addItem(name, price) {
     if (order[name]) {
         order[name].quantity++;
@@ -109,7 +120,12 @@ sales.push(sale);
 localStorage.setItem("sales", JSON.stringify(sales));
 
 updateSalesSummary();
+for (let itemName in order) {
+    inventory[itemName] -= order[itemName].quantity;};
 
+localStorage.setItem("inventory", JSON.stringify(inventory));
+
+updateInventoryDisplay();
 document.getElementById("saleComplete").classList.remove("hidden");
     document.getElementById("receiptOrderNumber").textContent =
         orderNumber;
@@ -151,4 +167,135 @@ function startNewOrder() {
         revenueToday.toFixed(2);
     document.getElementById("taxToday").textContent =
         taxToday.toFixed(2);
-}updateSalesSummary();
+}updateSalesSummary();function updateInventoryDisplay() {
+    const popcornDisplay = document.getElementById("inventoryPopcorn");
+
+if (inventory.Popcorn <= 5) {
+    popcornDisplay.textContent = inventory.Popcorn + " ⚠️ LOW";
+} else {
+    popcornDisplay.textContent = inventory.Popcorn;
+}
+
+    document.getElementById("inventorySoda").textContent =
+        inventory.Soda;
+
+    document.getElementById("inventoryCandy").textContent =
+        inventory.Candy;
+
+    document.getElementById("inventoryPretzel").textContent =
+        inventory.Pretzel;
+}updateInventoryDisplay();
+function updateBestSellers() {
+    const soldCounts = {
+        Popcorn: 0,
+        Soda: 0,
+        Candy: 0,
+        Pretzel: 0
+    };
+
+    sales.forEach(sale => {
+        sale.items.forEach(item => {
+            soldCounts[item.name] += item.quantity;
+        });
+    });
+
+    document.getElementById("soldPopcorn").textContent =
+        soldCounts.Popcorn;
+
+    document.getElementById("soldSoda").textContent =
+        soldCounts.Soda;
+
+    document.getElementById("soldCandy").textContent =
+        soldCounts.Candy;
+
+    document.getElementById("soldPretzel").textContent =
+        soldCounts.Pretzel;
+        const topSellerEntry = Object.entries(soldCounts).reduce(
+    (topItem, currentItem) => {
+        return currentItem[1] > topItem[1] ? currentItem : topItem;
+    }
+);
+
+const topSellerName = topSellerEntry[0];
+const topSellerQuantity = topSellerEntry[1];
+
+if (topSellerQuantity === 0) {
+    document.getElementById("topSeller").textContent =
+        "No sales yet";
+} else {
+    document.getElementById("topSeller").textContent =
+        `${topSellerName} — ${topSellerQuantity} sold`;
+}
+}updateBestSellers();
+document.getElementById("addProductBtn").addEventListener("click", function () {
+    document.getElementById("addProductPanel").classList.remove("hidden");
+});
+
+function closeAddProduct() {
+    document.getElementById("addProductPanel").classList.add("hidden");
+}function saveProduct() {
+    const name = document.getElementById("productName").value.trim();
+    const category = document.getElementById("productCategory").value.trim();
+    const price = Number(document.getElementById("productPrice").value);
+    const cost = Number(document.getElementById("productCost").value);
+    const startingInventory =
+        Number(document.getElementById("productInventory").value);
+    const restockLevel =
+        Number(document.getElementById("productRestockLevel").value);
+    const supplier =
+        document.getElementById("productSupplier").value.trim();
+
+    if (!name || !category || price <= 0) {
+        alert("Please enter a product name, category, and selling price.");
+        return;
+    }
+
+    const product = {
+        id: Date.now(),
+        name,
+        category,
+        price,
+        cost,
+        inventory: startingInventory,
+        restockLevel,
+        supplier,
+        active: true
+    };
+
+    products.push(product);
+    localStorage.setItem("products", JSON.stringify(products));
+    displayMenu();
+
+    closeAddProduct();
+
+    document.getElementById("productName").value = "";
+    document.getElementById("productCategory").value = "";
+    document.getElementById("productPrice").value = "";
+    document.getElementById("productCost").value = "";
+    document.getElementById("productInventory").value = "";
+    document.getElementById("productRestockLevel").value = "";
+    document.getElementById("productSupplier").value = "";
+
+    alert(`${name} was added to Lolli's Product Catalog!`);
+}function displayMenu() {
+    const menu = document.getElementById("menuButtons");
+
+    menu.innerHTML = "";
+
+    products.forEach(product => {
+        if (!product.active) {
+            return;
+        }
+
+        const button = document.createElement("button");
+
+        button.textContent =
+            `${product.name} - $${product.price.toFixed(2)}`;
+
+        button.onclick = function () {
+            addItem(product.name, product.price);
+        };
+
+        menu.appendChild(button);
+    });
+}displayMenu();
