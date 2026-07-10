@@ -16,7 +16,28 @@
         <h1>🍭 Snack Shack HQ</h1>
         <p>Making every snack, every sale, and every day a little sweeter.</p>
     </header>
+<div id="saleComplete" class="sale-complete hidden">
+    <div class="receipt">
+        <h2>🍭 Snack Shack HQ</h2>
 
+        <p>Order #<span id="receiptOrderNumber">1001</span></p>
+
+        <div id="receiptItems"></div>
+
+        <hr>
+
+        <p>Subtotal: $<span id="receiptSubtotal">0.00</span></p>
+        <p>Tax (Store Pays): $<span id="receiptTax">0.00</span></p>
+
+        <h3>Customer Pays: $<span id="receiptTotal">0.00</span></h3>
+
+        <p>Thank you for shopping with us!</p>
+    </div>
+
+    <button onclick="startNewOrder()">
+        Start New Order
+    </button>
+</div>
     <main class="pos-layout">
 
         <section class="menu-panel">
@@ -34,7 +55,7 @@
 
 <ul id="orderList"></ul>
 
-<<h3>Subtotal: $<span id="subtotal">0.00</span></h3>
+<h3>Subtotal: $<span id="subtotal">0.00</span></h3>
 
 <div class="tax-note">
     <h3>🍭 Tax (Store Pays): $<span id="tax">0.00</span></h3>
@@ -46,7 +67,9 @@
 
 <h2>Customer Pays: $<span id="total">0.00</span></h2>
 
-            <button onclick="clearOrder()">Clear Order</button>
+            <button onclick="completeSale()" class="checkout-btn">
+    Complete Sale
+</button>
         </section>
 
     </main>

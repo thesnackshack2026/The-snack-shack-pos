@@ -71,3 +71,44 @@ function clearOrder() {
 
     updateOrder();
 }
+function completeSale() {
+    const receiptItems = document.getElementById("receiptItems");
+    receiptItems.innerHTML = "";
+
+    let subtotalAmount = 0;
+
+    for (let itemName in order) {
+        const itemSubtotal =
+            order[itemName].price * order[itemName].quantity;
+
+        subtotalAmount += itemSubtotal;
+
+        const receiptLine = document.createElement("p");
+
+        receiptLine.textContent =
+            `${itemName} x${order[itemName].quantity} - $${itemSubtotal.toFixed(2)}`;
+
+        receiptItems.appendChild(receiptLine);
+    }
+
+    const tax = subtotalAmount * 0.06;
+
+    document.getElementById("receiptOrderNumber").textContent =
+        orderNumber;
+
+    document.getElementById("receiptSubtotal").textContent =
+        subtotalAmount.toFixed(2);
+
+    document.getElementById("receiptTax").textContent =
+        tax.toFixed(2);
+
+    document.getElementById("receiptTotal").textContent =
+        subtotalAmount.toFixed(2);
+
+    document.getElementById("saleComplete").classList.remove("hidden");
+}
+function startNewOrder() {
+    document.getElementById("saleComplete").classList.add("hidden");
+
+    clearOrder();
+}
