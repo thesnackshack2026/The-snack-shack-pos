@@ -1,17 +1,26 @@
 # Snack Shack HQ
 
-Mascot: Lolli 🍭
+**Mascot:** Lolli 🍭
 
-Motto: Making every snack, every sale, and every day a little sweeter.
+**Motto:** Making every snack, every sale, and every day a little sweeter.
 
-Status: Sprint 1 - Foundationcat README.md
-git remote -v
+## Project Status
 
-git remote -v
-git remote -v
-git remote add origin https://github.com/thesnackshack2026/The-snack-shack-pos.git
-git remote -v
-git statusgit status
-git status
-git branch
+The first working version of Lolli POS includes:
 
+- Product buttons
+- Quantity tracking
+- Remove-item controls
+- Order numbers
+- Clear Order
+- Subtotal calculation
+- Tax tracking for store reporting
+- Customer total that does not include tax
+
+## Project Structure
+
+- `frontend/` — POS screen, styling, and JavaScript
+- `backend/` — future business logic and services
+- `database/` — future product, inventory, and sales data
+- `docs/` — planning and documentation
+- `assets/` — logos, images, and icons

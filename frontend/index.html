@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Snack Shack HQ</title>
+    <head>
+    <meta charset="UTF-8">
+    <title>Snack Shack HQ</title>
+    <link rel="stylesheet" href="style.css">
+</head
+</head>
+<body>
+<div class="app">
+
+    <header>
+        <h1>🍭 Snack Shack HQ</h1>
+        <p>Making every snack, every sale, and every day a little sweeter.</p>
+    </header>
+
+    <main class="pos-layout">
+
+        <section class="menu-panel">
+            <h2>Menu</h2>
+
+            <button onclick="addItem('Popcorn', 4)">🍿 Popcorn - $4</button>
+            <button onclick="addItem('Soda', 3)">🥤 Soda - $3</button>
+            <button onclick="addItem('Candy', 2)">🍬 Candy - $2</button>
+            <button onclick="addItem('Pretzel', 5)">🥨 Pretzel - $5</button>
+        </section>
+
+        <section class="order-panel">
+           <h2>Current Order</h2>
+<p class="order-number">Order #<span id="orderNumber">1001</span></p>
+
+<ul id="orderList"></ul>
+
+<<h3>Subtotal: $<span id="subtotal">0.00</span></h3>
+
+<div class="tax-note">
+    <h3>🍭 Tax (Store Pays): $<span id="tax">0.00</span></h3>
+    <p>
+        Customers never see this charge.<br>
+        Lolli keeps track so you don't have to.
+    </p>
+</div>
+
+<h2>Customer Pays: $<span id="total">0.00</span></h2>
+
+            <button onclick="clearOrder()">Clear Order</button>
+        </section>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Snack Shack HQ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
