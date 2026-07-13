@@ -121,9 +121,18 @@ localStorage.setItem("sales", JSON.stringify(sales));
 
 updateSalesSummary();
 for (let itemName in order) {
-    inventory[itemName] -= order[itemName].quantity;};
+    const product = products.find(product => product.name === itemName);
 
-localStorage.setItem("inventory", JSON.stringify(inventory));
+    if (product) {
+        product.inventory = Math.max(
+            0,
+            Number(product.inventory || 0) - order[itemName].quantity
+        );
+    }
+}
+
+localStorage.setItem("products", JSON.stringify(products));
+displayMenu();
 
 updateInventoryDisplay();
 document.getElementById("saleComplete").classList.remove("hidden");
@@ -167,24 +176,37 @@ function startNewOrder() {
         revenueToday.toFixed(2);
     document.getElementById("taxToday").textContent =
         taxToday.toFixed(2);
-}updateSalesSummary();function updateInventoryDisplay() {
-    const popcornDisplay = document.getElementById("inventoryPopcorn");
-
-if (inventory.Popcorn <= 5) {
-    popcornDisplay.textContent = inventory.Popcorn + " ⚠️ LOW";
-} else {
-    popcornDisplay.textContent = inventory.Popcorn;
 }
+updateSalesSummary();
+function updateInventoryDisplay() {
+    const inventoryList = document.getElementById("inventoryList");
 
-    document.getElementById("inventorySoda").textContent =
-        inventory.Soda;
+    if (!inventoryList) {
+        return;
+    }
 
-    document.getElementById("inventoryCandy").textContent =
-        inventory.Candy;
+    inventoryList.innerHTML = "";
 
-    document.getElementById("inventoryPretzel").textContent =
-        inventory.Pretzel;
-}updateInventoryDisplay();
+    if (products.length === 0) {
+        inventoryList.textContent = "No products in the catalog yet.";
+        return;
+    }
+
+    products.forEach(product => {
+        const inventoryLine = document.createElement("p");
+
+        const quantity = Number(product.inventory || 0);
+        const restockLevel = Number(product.restockLevel || 0);
+        const lowStockWarning =
+            quantity <= restockLevel ? " ⚠️ LOW" : "";
+
+        inventoryLine.textContent =
+            `${product.name}: ${quantity}${lowStockWarning}`;
+
+        inventoryList.appendChild(inventoryLine);
+    });
+}
+updateInventoryDisplay();
 function updateBestSellers() {
     const soldCounts = {
         Popcorn: 0,
